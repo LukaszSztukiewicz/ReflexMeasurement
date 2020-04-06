@@ -14,7 +14,6 @@ public class gunMovement : MonoBehaviour
     {
 
         Move();
-
     }
     void Move()
     {
@@ -24,4 +23,5 @@ public class gunMovement : MonoBehaviour
         float Z = mousePosition.z - transform.position.z;
         transform.rotation = Quaternion.Euler(Mathf.Abs(offsetX - Mathf.Atan2(mousePosition.y - transform.position.y, Z) * Mathf.Rad2Deg), 0f, Mathf.Abs(offsetZ - Mathf.Atan2(mousePosition.x - transform.position.x, Z) * Mathf.Rad2Deg));
     }
+    
 }
