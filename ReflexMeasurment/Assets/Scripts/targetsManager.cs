@@ -11,6 +11,7 @@ public class targetsManager : MonoBehaviour
     public Camera mainCamera;
     public LayerMask mask;
     private float timer = 0f;
+    private bool isSkip=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,11 +27,31 @@ public class targetsManager : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             isHit=Shoot();
-            if (tar2 != null&&isHit)
-            { Destroy(tar2); tar2 = null;Debug.Log("Czas strzału: " + timer);timer = 0f; Choose(out tar2); }      
+            if (tar2 != null)
+            { Destroy(tar2); tar2 = null;
+                /*
+                if(isSkip)
+                {
+                    MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, 0f, 0f));
+                    isSkip = false;
+                }else if(isHit)
+                    MainMenuScrpit.playerInfo.lista.Add(new Info(1, timer, 0f, 0f));
+                else
+                    MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, 0f, 0f));*/
+                   
+                timer = 0f; 
+                Choose(out tar2); }      
             
                  
         }
+        /*
+        if(Input.GetKey(KeyCode.E))
+        {
+            if (MainMenuScrpit.playerInfo.lista.Count == 0)
+                Debug.Log("Puste!!!!!!");
+            else
+                Debug.Log(MainMenuScrpit.playerInfo.lista.Count);
+        }*/
         timer += Time.deltaTime;
     }
     void Choose(out GameObject tar)
@@ -39,16 +60,21 @@ public class targetsManager : MonoBehaviour
         rand = new System.Random();
         Transform coor=transform.GetChild(rand.Next(0, childNumber)).gameObject.transform;
         //Debug.Log(coor.localPosition);
-        tar=Instantiate(target, coor.position, coor.localRotation);
+        tar=Instantiate(target, coor.position, Quaternion.Euler(-90f,0f,-90f));
         //Instantiate(target, coor);
         
         
     }
+    public void Skip()
+    {
+        isSkip = true;
+    }
     bool Shoot()
     {
+       
         RaycastHit hit;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 100f, mask))
+        if (Physics.Raycast(ray, out hit, 10000f, mask))
             return true;
         else
             return false;
