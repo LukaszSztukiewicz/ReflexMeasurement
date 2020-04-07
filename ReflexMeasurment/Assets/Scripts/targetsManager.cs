@@ -15,6 +15,10 @@ public class targetsManager : MonoBehaviour
     private bool isSkip = false;
     public Material material;
     public Texture2D tex;
+
+    //Lukasz
+    public GameObject GUII;
+    private bool isPausedd;
     void Start()
     {
         childNumber = transform.childCount;
@@ -23,32 +27,37 @@ public class targetsManager : MonoBehaviour
 
     void Update()
     {
-        bool isHit;
-        Vector2 coor;
-        if (Input.GetMouseButtonDown(0))
+        isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
+        if (isPausedd == false)
         {
-            isHit = Shoot(out coor);
-            if (tar2 != null)
+            bool isHit;
+            Vector2 coor;
+            if (Input.GetMouseButtonDown(0))
             {
-                Destroy(tar2); tar2 = null;
-                //Zapisy
-                
-                if(isSkip)
+                isHit = Shoot(out coor);
+                if (tar2 != null)
                 {
-                    MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
-                    isSkip = false;
-                }else if(isHit)
-                    MainMenuScrpit.playerInfo.lista.Add(new Info(1, timer, coor));
-                else
-                    MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+                    Destroy(tar2); tar2 = null;
+                    //Zapisy
 
-                timer = 0f;
-                Choose(out tar2);
+                    if (isSkip)
+                    {
+                        MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
+                        isSkip = false;
+                    }
+                    else if (isHit)
+                        MainMenuScrpit.playerInfo.lista.Add(new Info(1, timer, coor));
+                    else
+                        MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+
+                    timer = 0f;
+                    Choose(out tar2);
+                }
+
+
             }
-
-
+            timer += Time.deltaTime;
         }
-        timer += Time.deltaTime;
     }
     void Choose(out GameObject tar)
     {
