@@ -30,4 +30,8 @@ public class saveScore : MonoBehaviour
         }
         return "";
     }
+    public void Save()
+    {
+
+    }
 }
