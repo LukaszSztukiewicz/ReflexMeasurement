@@ -12,11 +12,14 @@ public class targetsManager : MonoBehaviour
     public LayerMask mask;
     private float timer = 0f;
     private bool isSkip=false;
+    public Material material;
+    public Texture2D tex;
     // Start is called before the first frame update
     void Start()
     {
         childNumber = transform.childCount;
         Choose(out tar2);
+      
         //Debug.Log(transform.childCount.ToString());
     }
 
@@ -43,6 +46,10 @@ public class targetsManager : MonoBehaviour
                 Choose(out tar2); }      
             
                  
+        }/*
+        if(Input.GetKey(KeyCode.E))
+        {
+            material.mainTexture=tex;
         }
         /*
         if(Input.GetKey(KeyCode.E))
@@ -60,6 +67,9 @@ public class targetsManager : MonoBehaviour
         rand = new System.Random();
         Transform coor=transform.GetChild(rand.Next(0, childNumber)).gameObject.transform;
         //Debug.Log(coor.localPosition);
+        if (loadImage.textures.Count == 0)
+            material.mainTexture = tex;
+        material.mainTexture = loadImage.textures[rand.Next(0,loadImage.textures.Count)];
         tar=Instantiate(target, coor.position, Quaternion.Euler(-90f,0f,-90f));
         //Instantiate(target, coor);
         
