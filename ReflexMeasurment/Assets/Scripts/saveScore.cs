@@ -9,7 +9,7 @@ public class saveScore : MonoBehaviour
     void Start()
     {
         foreach (var elem in playerInfo.lista)
-            Debug.Log(isHit(elem.z) + " " + elem.time + " " + elem.x + " " + elem.y);
+            Debug.Log(isHit(elem.z) + " " + elem.time + " " + elem.coordinates);
     }
 
     // Update is called once per frame
