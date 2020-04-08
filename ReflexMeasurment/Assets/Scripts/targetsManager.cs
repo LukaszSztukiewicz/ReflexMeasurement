@@ -19,6 +19,8 @@ public class targetsManager : MonoBehaviour
     //Lukasz
     public GameObject GUII;
     private bool isPausedd;
+    public GameObject gun;
+
     void Start()
     {
         childNumber = transform.childCount;
@@ -37,19 +39,28 @@ public class targetsManager : MonoBehaviour
                 isHit = Shoot(out coor);
                 if (tar2 != null)
                 {
+
                     Destroy(tar2); tar2 = null;
                     //Zapisy
-                    /*
+                    
                     if (isSkip)
                     {
                         MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
                         isSkip = false;
                     }
                     else if (isHit)
+                    {
                         MainMenuScrpit.playerInfo.lista.Add(new Info(1, timer, coor));
+                        //Gunshot
+                        GUII.GetComponent<AudioSource>().PlayOneShot(GUII.GetComponent<AudioSource>().clip);
+                        gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
+                    }
                     else
-                        MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));*/
-
+                    {
+                        MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+                        //Gunshot
+                        gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
+                    }
                     timer = 0f;
                     Choose(out tar2);
                 }
@@ -77,6 +88,10 @@ public class targetsManager : MonoBehaviour
     public void Skip()
     {
         isSkip = true;
+    }
+    public void deSkip()
+    {
+        isSkip = false;
     }
     bool Shoot(out Vector2 coor)
     {
