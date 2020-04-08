@@ -15,7 +15,9 @@ public class targetsManager : MonoBehaviour
     private bool isSkip = false;
     public Material material;
     public Texture2D tex;
-
+    public GameObject child;
+    public ParticleSystem flash;
+    Animator anim;
     //Lukasz
     public GameObject GUII;
     private bool isPausedd;
@@ -23,6 +25,7 @@ public class targetsManager : MonoBehaviour
 
     void Start()
     {
+        anim = child.GetComponent<Animator>();
         childNumber = transform.childCount;
         Choose(out tar2);
     }
@@ -40,13 +43,16 @@ public class targetsManager : MonoBehaviour
                 if (tar2 != null)
                 {
 
-                    Destroy(tar2); tar2 = null;
+                   
                     //Zapisy
                     
                     if (isSkip)
                     {
                         MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
                         isSkip = false;
+                        timer = 0f;
+                        Destroy(tar2); tar2 = null;
+                        Choose(out tar2);
                     }
                     else if (isHit)
                     {
@@ -54,15 +60,20 @@ public class targetsManager : MonoBehaviour
                         //Gunshot
                         GUII.GetComponent<AudioSource>().PlayOneShot(GUII.GetComponent<AudioSource>().clip);
                         gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
+                        anim.SetTrigger("Shoot"); flash.Play();
+                        timer = 0f;
+                        Destroy(tar2); tar2 = null;
+                        Choose(out tar2);
                     }
                     else
                     {
                         MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+                        timer = 0f;
+                        anim.SetTrigger("Shoot"); flash.Play();
                         //Gunshot
                         gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
                     }
-                    timer = 0f;
-                    Choose(out tar2);
+                    
                 }
 
 
