@@ -58,7 +58,6 @@ public class PauseScrpit : MonoBehaviour
         Time.timeScale = 1f;
         iSPaused = true;
         SceneManager.LoadScene(0);
- 
     }
 
     public void Quit()
@@ -71,7 +70,6 @@ public class PauseScrpit : MonoBehaviour
         Time.timeScale = 1f;
         iSPaused = true;
         SceneManager.LoadScene(2);
-
     }
 }
 

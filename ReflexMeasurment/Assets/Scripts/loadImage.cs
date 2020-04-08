@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
+
 public class loadImage : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -24,9 +25,10 @@ public class loadImage : MonoBehaviour
                 if (fi.Extension == ".jpg"||fi.Extension==".png")
                 {
                     byte[] fileData;
-                    fileData = File.ReadAllBytes(fi.FullName);
-                    Texture2D tex=new Texture2D(256,512);
+                    fileData = File.ReadAllBytes(fi.FullName);         
+                    Texture2D tex=new Texture2D(360,600);
                     tex.LoadImage(fileData);
+                   // Debug.Log(tex.width + " "+tex.height);
                     textures.Add(tex);
                 }
             }
