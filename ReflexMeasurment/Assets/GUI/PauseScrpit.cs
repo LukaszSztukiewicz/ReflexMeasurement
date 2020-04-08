@@ -57,20 +57,20 @@ public class PauseScrpit : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
-        iSPaused = false;
+        iSPaused = true;
     }
 
     public void Quit()
     {
         Time.timeScale = 1f;
         Application.Quit();
-        iSPaused = false;
+        iSPaused = true;
     }
     public void Save()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(2);
-        iSPaused = false;
+        iSPaused = true;
     }
 }
 
