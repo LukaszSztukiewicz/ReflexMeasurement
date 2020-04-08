@@ -8,7 +8,6 @@ public class PauseScrpit : MonoBehaviour
     // Start is called before the first frame update
 
     public bool iSPaused;
-
     public GameObject pausemenu;
 
     void Start()
