@@ -7,12 +7,13 @@ public class gunMovement : MonoBehaviour
     public Camera mainCamera;
     public Texture2D crosshair;
     public GameObject GUII;
-    Animator anim;
-    public GameObject child;
+    
+    
     private bool isPaused = false;
+    
     void Start()
     {
-        anim = child.GetComponent<Animator>();
+        
         Cursor.SetCursor(crosshair, new Vector2(crosshair.width/2,crosshair.height/2), CursorMode.ForceSoftware);
     }
     void Update()
@@ -21,8 +22,7 @@ public class gunMovement : MonoBehaviour
         if (isPaused == false)
         {
             Move();
-            if (Input.GetMouseButtonDown(0))
-                anim.SetTrigger("Shoot");
+
         }
         
     }
