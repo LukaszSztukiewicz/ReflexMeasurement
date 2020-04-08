@@ -6,15 +6,25 @@ public class gunMovement : MonoBehaviour
 {
     public Camera mainCamera;
     public Texture2D crosshair;
+    public GameObject GUII;
+    Animator anim;
+    public GameObject child;
+    private bool isPaused = false;
     void Start()
     {
+        anim = child.GetComponent<Animator>();
         Cursor.SetCursor(crosshair, new Vector2(crosshair.width/2,crosshair.height/2), CursorMode.ForceSoftware);
     }
     void Update()
     {
-
-        Move();
-
+        isPaused = GUII.GetComponent<PauseScrpit>().iSPaused;
+        if (isPaused == false)
+        {
+            Move();
+            if (Input.GetMouseButtonDown(0))
+                anim.SetTrigger("Shoot");
+        }
+        
     }
     void Move()
     {
@@ -24,4 +34,5 @@ public class gunMovement : MonoBehaviour
         float Z = mousePosition.z - transform.position.z;
         transform.rotation = Quaternion.Euler(Mathf.Abs(offsetX - Mathf.Atan2(mousePosition.y - transform.position.y, Z) * Mathf.Rad2Deg), 0f, Mathf.Abs(offsetZ - Mathf.Atan2(mousePosition.x - transform.position.x, Z) * Mathf.Rad2Deg));
     }
+    
 }
