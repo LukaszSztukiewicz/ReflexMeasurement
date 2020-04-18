@@ -24,7 +24,7 @@ public class targetsManager : MonoBehaviour
     public GameObject GUII;
     private bool isPausedd;
     public GameObject gun;
-    public List<int> rand;
+    public List<int> rand = new List<int>() { 1, 2, 5, 5, 7, 7, 2, 3, 1, 4, 8, 9, 8, 9, 3, 4, 5, 7, 3, 2, 1 };
     public int x = 0;
 
 
@@ -32,7 +32,6 @@ public class targetsManager : MonoBehaviour
     {
         anim = child.GetComponent<Animator>();
         childNumber = transform.childCount;
-        rand = new List<int>() { 1, 2, 5, 5, 7, 7, 2, 3, 1, 4, 8, 9, 8, 9, 3, 4, 5, 7, 3, 2, 1 };
         Choose(out tar2);
     }
 
