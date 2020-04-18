@@ -24,7 +24,7 @@ public class targetsManager : MonoBehaviour
     public GameObject GUII;
     private bool isPausedd;
     public GameObject gun;
-    public List<int> rand = new List<int>() {2, 3, 5, 5, 7, 7, 2, 3, 1, 4, 8, 9, 8, 9, 3, 4, 5, 7, 3, 2};
+    public List<int> rand;
     public int x = 0;
 
 
@@ -32,6 +32,7 @@ public class targetsManager : MonoBehaviour
     {
         anim = child.GetComponent<Animator>();
         childNumber = transform.childCount;
+        rand = new List<int>() { 1, 2, 5, 5, 7, 7, 2, 3, 1, 4, 8, 9, 8, 9, 3, 4, 5, 7, 3, 2, 1 };
         Choose(out tar2);
     }
 
@@ -39,6 +40,7 @@ public class targetsManager : MonoBehaviour
     {
         if (x == rand.Count)
         {
+
             SceneManager.LoadScene(2);
         }
         isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
@@ -103,8 +105,7 @@ public class targetsManager : MonoBehaviour
         Debug.Log(x);
         //rand = new System.Random();
         //Transform coor=transform.GetChild(rand.Next(0, childNumber)).gameObject.transform;
-        Transform coor=transform.GetChild(Math.Min(rand[x], childNumber)).gameObject.transform;
-        //Transform coor=transform.GetChild(1).gameObject.transform;
+        Transform coor=transform.GetChild(rand[x]%childNumber).gameObject.transform;
         material.mainTexture = tex;
 
         //zmiana tekstury      
@@ -112,7 +113,7 @@ public class targetsManager : MonoBehaviour
             material.mainTexture = tex;
         else
         //{ material.mainTexture = loadImage.textures[rand.Next(0, loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
-        { material.mainTexture = loadImage.textures[Math.Min(rand[x++], loadImage.textures.Count-1)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
+        { material.mainTexture = loadImage.textures[(x++)%(loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
         tar = Instantiate(target, coor.position, Quaternion.Euler(-90f, 0f, -90f));
 
 
