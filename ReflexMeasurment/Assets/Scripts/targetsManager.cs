@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System;
 
 public class targetsManager : MonoBehaviour
 {
     int childNumber = 6;
-    System.Random rand;
+    //System.Random rand;
     public GameObject target;
     public GameObject test;
     private GameObject tar2 = null;
@@ -22,6 +24,9 @@ public class targetsManager : MonoBehaviour
     public GameObject GUII;
     private bool isPausedd;
     public GameObject gun;
+    public List<int> rand = new List<int>() { 1, 2, 5, 5, 7, 7, 2, 3, 1, 4, 8, 9, 8, 9, 3, 4, 5, 7, 3, 2, 1 };
+    public int x = 0;
+
 
     void Start()
     {
@@ -32,6 +37,11 @@ public class targetsManager : MonoBehaviour
 
     void Update()
     {
+        if (x == rand.Count)
+        {
+
+            SceneManager.LoadScene(2);
+        }
         isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
         if (isPausedd == false)
         {
@@ -52,6 +62,10 @@ public class targetsManager : MonoBehaviour
                         isSkip = false;
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
+
+                        //System.Threading.Thread.Sleep(rand[x]*500);
+                        //System.Threading.Thread.Sleep(1000);
+
                         Choose(out tar2);
                     }
                     else if (isHit)
@@ -63,6 +77,10 @@ public class targetsManager : MonoBehaviour
                         anim.SetTrigger("Shoot"); flash.Play();
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
+
+                        //System.Threading.Thread.Sleep(rand[x] * 500);
+
+
                         Choose(out tar2);
                     }
                     else
@@ -83,15 +101,18 @@ public class targetsManager : MonoBehaviour
     }
     void Choose(out GameObject tar)
     {
-        rand = new System.Random();
-        Transform coor=transform.GetChild(rand.Next(0, childNumber)).gameObject.transform;
+        Debug.Log(x);
+        //rand = new System.Random();
+        //Transform coor=transform.GetChild(rand.Next(0, childNumber)).gameObject.transform;
+        Transform coor=transform.GetChild(rand[x]%childNumber).gameObject.transform;
         material.mainTexture = tex;
 
         //zmiana tekstury      
         if (loadImage.textures.Count == 0)
             material.mainTexture = tex;
         else
-        { material.mainTexture = loadImage.textures[rand.Next(0, loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
+        //{ material.mainTexture = loadImage.textures[rand.Next(0, loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
+        { material.mainTexture = loadImage.textures[(x++)%(loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
         tar = Instantiate(target, coor.position, Quaternion.Euler(-90f, 0f, -90f));
 
 
