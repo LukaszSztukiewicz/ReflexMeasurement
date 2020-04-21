@@ -1283,7 +1283,7 @@ MonoBehaviour:
   m_text: "\nAUTORS: Miko\u0142aj Szawerda & \u0141ukasz Sztukiewicz\n\nLICENSE:
     APACHE 2.0\n\nCONTACT: \nlukasz.sztukiewicz@gmail.com\nmikolaj.szawerda@wp.pl\n\nFeel
     free to contact us and share your experience!\n\nGithub: https://github.com/LukaszSztukiewicz/ReflexMeasurement\n\nVersion:
-    1.5.2s"
+    1.6.1s"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

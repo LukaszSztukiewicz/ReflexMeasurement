@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
+using UnityEngine.UI;
 
 public class targetsManager : MonoBehaviour
 {
@@ -24,22 +24,25 @@ public class targetsManager : MonoBehaviour
     public GameObject GUII;
     private bool isPausedd;
     public GameObject gun;
-    public List<int> rand = new List<int>() { 1, 2, 5, 5, 7, 7, 2, 3, 1, 4, 8, 9, 8, 9, 3, 4, 5, 7, 3, 2, 1 };
+    public List<int> rand = new List<int>() { 1, 2, 5, 5, 7, 4, 2, 3, 1, 4, 2, 3, 8, 3, 3, 4, 5, 7, 3, 2, 1 };
     public int x = 0;
+    public GameObject LoadingScreen;
+    public Slider slider;
+    public float progress = 0f;
 
 
     void Start()
     {
         anim = child.GetComponent<Animator>();
         childNumber = transform.childCount;
+        isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
         Choose(out tar2);
     }
 
     void Update()
     {
-        if (x > loadImage.textures.Count)
-            SceneManager.LoadScene(2);
-        isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
+        
+
         if (isPausedd == false)
         {
             bool isHit;
@@ -56,6 +59,13 @@ public class targetsManager : MonoBehaviour
                         isSkip = false;
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
+                        if (x > loadImage.textures.Count)
+                        {
+                            LoadingScreen.SetActive(true);
+                            StartCoroutine(SliderGo());
+                            StartCoroutine(ILoadScene(2));
+
+                        }
                         Choose(out tar2);
                     }
                     else if (isHit)
@@ -67,6 +77,15 @@ public class targetsManager : MonoBehaviour
                         anim.SetTrigger("Shoot"); flash.Play();
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
+
+                        if (x > loadImage.textures.Count)
+                        {
+                            LoadingScreen.SetActive(true);
+                            StartCoroutine(SliderGo());
+                            StartCoroutine(ILoadScene(2));
+
+                        }
+
 
                         StartCoroutine(Wait());
                     }
@@ -81,12 +100,16 @@ public class targetsManager : MonoBehaviour
                 }
             }
             timer += Time.deltaTime;
+
+            
         }
+
     }
     IEnumerator Wait()
     {
+        
+        yield return new WaitForSeconds(rand[x]/2);
         Choose(out tar2);
-        yield return new WaitForSeconds(5);
     }
     void Choose(out GameObject tar)
     {
@@ -123,5 +146,21 @@ public class targetsManager : MonoBehaviour
             return false;
         }
             
+    }
+    public IEnumerator ILoadScene(int scene)
+    {
+        yield return new WaitForSecondsRealtime(3);
+        SceneManager.LoadSceneAsync(scene);
+    }
+    public IEnumerator SliderGo()
+    {
+        while (progress<1)
+        {
+            slider.value = progress;
+            progress += 0.001f;
+            yield return null;
+
+        }
+
     }
 }
