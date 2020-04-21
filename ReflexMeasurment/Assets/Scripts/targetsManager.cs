@@ -37,11 +37,8 @@ public class targetsManager : MonoBehaviour
 
     void Update()
     {
-        if (x == rand.Count)
-        {
-
+        if (x > loadImage.textures.Count)
             SceneManager.LoadScene(2);
-        }
         isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
         if (isPausedd == false)
         {
@@ -51,21 +48,14 @@ public class targetsManager : MonoBehaviour
             {
                 isHit = Shoot(out coor);
                 if (tar2 != null)
-                {
-
-                   
-                    //Zapisy
-                    
+                {                  
+                    //Zapisy               
                     if (isSkip)
                     {
                         MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
                         isSkip = false;
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
-
-                        //System.Threading.Thread.Sleep(rand[x]*500);
-                        //System.Threading.Thread.Sleep(1000);
-
                         Choose(out tar2);
                     }
                     else if (isHit)
@@ -78,10 +68,7 @@ public class targetsManager : MonoBehaviour
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
 
-                        //System.Threading.Thread.Sleep(rand[x] * 500);
-
-
-                        Choose(out tar2);
+                        StartCoroutine(Wait());
                     }
                     else
                     {
@@ -90,32 +77,28 @@ public class targetsManager : MonoBehaviour
                         anim.SetTrigger("Shoot"); flash.Play();
                         //Gunshot
                         gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
-                    }
-                    
+                    }             
                 }
-
-
             }
             timer += Time.deltaTime;
         }
     }
+    IEnumerator Wait()
+    {
+        Choose(out tar2);
+        yield return new WaitForSeconds(5);
+    }
     void Choose(out GameObject tar)
     {
-        Debug.Log(x);
-        //rand = new System.Random();
-        //Transform coor=transform.GetChild(rand.Next(0, childNumber)).gameObject.transform;
         Transform coor=transform.GetChild(rand[x]%childNumber).gameObject.transform;
         material.mainTexture = tex;
-
         //zmiana tekstury      
         if (loadImage.textures.Count == 0)
             material.mainTexture = tex;
         else
-        //{ material.mainTexture = loadImage.textures[rand.Next(0, loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
-        { material.mainTexture = loadImage.textures[(x++)%(loadImage.textures.Count)]; Debug.Log(material.mainTexture.width + " " + material.mainTexture.height); }
+            material.mainTexture = loadImage.textures[(x++)%(loadImage.textures.Count)];
+
         tar = Instantiate(target, coor.position, Quaternion.Euler(-90f, 0f, -90f));
-
-
     }
     public void Skip()
     {
@@ -129,9 +112,8 @@ public class targetsManager : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 10000f, mask))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
         {
-            Debug.Log(material.mainTexture.width + " " + material.mainTexture.height);
             coor  =new Vector2(hit.textureCoord2.x*(float)material.mainTexture.width,Mathf.Abs((float)material.mainTexture.height*(1-hit.textureCoord2.y)));
             return true;
         }

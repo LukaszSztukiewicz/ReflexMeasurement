@@ -12,8 +12,7 @@ public class gunMovement : MonoBehaviour
     private bool isPaused = false;
     
     void Start()
-    {
-        
+    { 
         Cursor.SetCursor(crosshair, new Vector2(crosshair.width/2,crosshair.height/2), CursorMode.ForceSoftware);
     }
     void Update()

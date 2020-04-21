@@ -9,7 +9,13 @@ public class loadImage : MonoBehaviour
 {
     // Start is called before the first frame update
     public static List<Texture2D> textures=new List<Texture2D>();
+    public static FileInfo[] fileList;
     void Start()
+    {
+
+        loadIm();
+    }
+   public static void loadIm()
     {
         try
         {
@@ -19,29 +25,22 @@ public class loadImage : MonoBehaviour
             else
                 directoryInfo.Create();
 
-            FileInfo[] fileList = directoryInfo.GetFiles();
+            fileList = directoryInfo.GetFiles();
+
             foreach (var fi in fileList)
             {
-                if (fi.Extension == ".jpg"||fi.Extension==".png")
+                if (fi.Extension == ".jpg" || fi.Extension == ".png")
                 {
                     byte[] fileData;
-                    fileData = File.ReadAllBytes(fi.FullName);         
-                    Texture2D tex=new Texture2D(360,600);
+                    fileData = File.ReadAllBytes(fi.FullName);
+                    Texture2D tex = new Texture2D(360, 600);
                     tex.LoadImage(fileData);
-                   // Debug.Log(tex.width + " "+tex.height);
                     textures.Add(tex);
                 }
             }
             Debug.Log(textures.Count);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         { Debug.Log(ex); }
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
