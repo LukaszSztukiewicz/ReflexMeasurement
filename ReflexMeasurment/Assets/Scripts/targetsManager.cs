@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 public class targetsManager : MonoBehaviour
@@ -62,10 +63,10 @@ public class targetsManager : MonoBehaviour
         }
     }
 
-    IEnumerator Wait()
+    IEnumerator Wait(Action AfterWait)
     {
         yield return new WaitForSeconds(rand[x] / 2);
-        Choose(out tar2);
+        AfterWait();
     }
     void Choose(out GameObject tar)
     {
@@ -111,7 +112,10 @@ public class targetsManager : MonoBehaviour
                 GameMenager.GameState = GameMenager.GameStates.OnEndGame;
                 GameGUI.GetComponent<GameGUIScrpit>().EndGame();
             }
-            Choose(out tar2);
+            StartCoroutine(Wait(() =>
+            {
+                Choose(out tar2);
+            }));
         }
         else if (isHit)
         {
@@ -127,7 +131,11 @@ public class targetsManager : MonoBehaviour
                 GameMenager.GameState = GameMenager.GameStates.OnEndGame;
                 GameGUI.GetComponent<GameGUIScrpit>().EndGame();
             }
-            StartCoroutine(Wait());
+            StartCoroutine(Wait(() =>
+            {
+                Choose(out tar2);
+            }
+            ));
         }
         else
         {

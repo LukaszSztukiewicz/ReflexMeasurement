@@ -43,13 +43,8 @@ public class saveScore : MonoBehaviour
         catch(System.Exception ex)
         {
             Debug.Log(ex.Message);
-        }finally
-        {
-            Application.Quit();
         }
-        
-        
-        
+
     }
 }
 
