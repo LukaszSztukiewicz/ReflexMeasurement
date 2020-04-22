@@ -5,7 +5,7 @@ using System.IO;
 using TMPro;
 public class saveScore : MonoBehaviour
 {
-    private playerInfo playerInfo = MainMenuScrpit.playerInfo;
+    private playerInfo playerInfo = GameMenager.playerInfo;
     private string path = @"scores.csv";
     public TextMeshProUGUI playername;
     // Start is called before the first frame update
