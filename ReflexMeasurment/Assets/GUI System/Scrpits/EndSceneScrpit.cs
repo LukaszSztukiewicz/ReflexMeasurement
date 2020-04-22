@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +10,7 @@ public class EndSceneScrpit : MonoBehaviour
 
     public IEnumerator ILoadScene(int scene)
     {
-        yield return new WaitForSecondsRealtime(3);
+        yield return new WaitForSecondsRealtime(1.5f);
         SceneManager.LoadSceneAsync(scene);
     }
     public IEnumerator SliderGo()
@@ -19,7 +18,7 @@ public class EndSceneScrpit : MonoBehaviour
         while (progress < 1)
         {
             slider.value = progress;
-            progress += 0.001f;
+            progress += 0.02f;
             yield return null;
 
         }

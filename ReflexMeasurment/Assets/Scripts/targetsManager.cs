@@ -19,6 +19,7 @@ public class targetsManager : MonoBehaviour
     public ParticleSystem flash;
     private bool isHit;
     private Vector2 coor;
+    private RaycastHit hit;
     Animator anim;
     //Lukasz
     public GameObject GameGUI;
@@ -48,50 +49,13 @@ public class targetsManager : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                audioSource.PlayOneShot(gunshot);
+                anim.SetTrigger("Shoot"); flash.Play();
+
                 isHit = Shoot(out coor);
                 if (tar2 != null)
                 {
-                    //Zapisy               
-                    if (isSkip)
-                    {
-                        GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
-                        isSkip = false;
-                        timer = 0f;
-                        Destroy(tar2); tar2 = null;
-                        x++;
-                        if (x == loadImage.textures.Count)
-                        {
-                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
-                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
-                        }
-                        Choose(out tar2);
-                    }
-                    else if (isHit)
-                    {
-                        GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
-
-
-                        audioSource.PlayOneShot(confirmation);
-                        audioSource.PlayOneShot(gunshot);
-
-                        anim.SetTrigger("Shoot"); flash.Play();
-                        timer = 0f;
-                        Destroy(tar2); tar2 = null;
-                        x++;
-                        if (x > loadImage.textures.Count)
-                        {
-                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
-                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
-                        }
-                        StartCoroutine(Wait());
-                    }
-                    else
-                    {
-                        GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
-                        anim.SetTrigger("Shoot"); flash.Play();
-                        //Gunshot
-                        audioSource.PlayOneShot(gunshot);
-                    }
+                    RejestrShot();
                 }
             }
             timer += Time.deltaTime;
@@ -100,7 +64,7 @@ public class targetsManager : MonoBehaviour
 
     IEnumerator Wait()
     {
-        yield return new WaitForSeconds(rand[x]/2);
+        yield return new WaitForSeconds(rand[x] / 2);
         Choose(out tar2);
     }
     void Choose(out GameObject tar)
@@ -118,7 +82,7 @@ public class targetsManager : MonoBehaviour
 
     bool Shoot(out Vector2 coor)
     {
-        RaycastHit hit;
+
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
         {
@@ -132,10 +96,43 @@ public class targetsManager : MonoBehaviour
         }
             
     }
-    public IEnumerable PLAYING()
+    public void RejestrShot()
     {
-        
-        yield return null;
+        //Zapisy               
+        if (isSkip)
+        {
+            GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
+            isSkip = false;
+            timer = 0f;
+            Destroy(tar2); tar2 = null;
+            x++;
+            if (x >= loadImage.textures.Count)
+            {
+                GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                GameGUI.GetComponent<GameGUIScrpit>().EndGame();
+            }
+            Choose(out tar2);
+        }
+        else if (isHit)
+        {
+            GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
+
+            audioSource.PlayOneShot(confirmation);
+
+            timer = 0f;
+            Destroy(tar2); tar2 = null;
+            x++;
+            if (x >= loadImage.textures.Count)
+            {
+                GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                GameGUI.GetComponent<GameGUIScrpit>().EndGame();
+            }
+            StartCoroutine(Wait());
+        }
+        else
+        {
+            GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+        }
     }
 
     public void Skip()
