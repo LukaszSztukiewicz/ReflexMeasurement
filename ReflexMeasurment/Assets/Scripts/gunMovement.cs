@@ -6,10 +6,6 @@ public class gunMovement : MonoBehaviour
 {
     public Camera mainCamera;
     public Texture2D crosshair;
-    public GameObject GUII;
-    
-    
-    private bool isPaused = false;
     
     void Start()
     { 
@@ -17,11 +13,9 @@ public class gunMovement : MonoBehaviour
     }
     void Update()
     {
-        isPaused = GUII.GetComponent<PauseScrpit>().iSPaused;
-        if (isPaused == false)
+        if (GameMenager.GameState == GameMenager.GameStates.Running)
         {
             Move();
-
         }
         
     }

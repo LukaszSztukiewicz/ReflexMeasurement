@@ -1,113 +1,105 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
 
 public class targetsManager : MonoBehaviour
 {
     int childNumber = 6;
-    //System.Random rand;
     public GameObject target;
     public GameObject test;
     private GameObject tar2 = null;
     public Camera mainCamera;
     public LayerMask mask;
     private float timer = 0f;
-    private bool isSkip = false;
+
     public Material material;
     public Texture2D tex;
     public GameObject child;
     public ParticleSystem flash;
+    private bool isHit;
+    private Vector2 coor;
     Animator anim;
     //Lukasz
-    public GameObject GUII;
-    private bool isPausedd;
-    public GameObject gun;
-    public List<int> rand = new List<int>() { 1, 2, 5, 5, 7, 4, 2, 3, 1, 4, 2, 3, 8, 3, 3, 4, 5, 7, 3, 2, 1 };
+    public GameObject GameGUI;
+    private bool isSkip = false;
+
+    public AudioClip gunshot;
+    public AudioClip confirmation;
+    public AudioSource audioSource;
+
+    public List<int> rand = new List<int>() { 1, 2, 5, 2, 7, 4, 2, 3, 1, 4, 2, 3, 8, 3, 6, 4, 5, 7, 3, 2, 1 };
     public int x = 0;
-    public GameObject LoadingScreen;
-    public Slider slider;
-    public float progress = 0f;
+
+
 
 
     void Start()
     {
         anim = child.GetComponent<Animator>();
         childNumber = transform.childCount;
-        isPausedd = GUII.GetComponent<PauseScrpit>().iSPaused;
         Choose(out tar2);
+        audioSource = GameGUI.GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        
-
-        if (isPausedd == false)
+        if (GameMenager.GameState == GameMenager.GameStates.Running)
         {
-            bool isHit;
-            Vector2 coor;
             if (Input.GetMouseButtonDown(0))
             {
                 isHit = Shoot(out coor);
                 if (tar2 != null)
-                {                  
+                {
                     //Zapisy               
                     if (isSkip)
                     {
-                        MainMenuScrpit.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
+                        GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
                         isSkip = false;
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
-                        if (x > loadImage.textures.Count)
+                        x++;
+                        if (x == loadImage.textures.Count)
                         {
-                            LoadingScreen.SetActive(true);
-                            StartCoroutine(SliderGo());
-                            StartCoroutine(ILoadScene(2));
-
+                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
                         }
                         Choose(out tar2);
                     }
                     else if (isHit)
                     {
-                        MainMenuScrpit.playerInfo.lista.Add(new Info(1, timer, coor));
-                        //Gunshot
-                        GUII.GetComponent<AudioSource>().PlayOneShot(GUII.GetComponent<AudioSource>().clip);
-                        gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
+                        GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
+
+
+                        audioSource.PlayOneShot(confirmation);
+                        audioSource.PlayOneShot(gunshot);
+
                         anim.SetTrigger("Shoot"); flash.Play();
                         timer = 0f;
                         Destroy(tar2); tar2 = null;
-
+                        x++;
                         if (x > loadImage.textures.Count)
                         {
-                            LoadingScreen.SetActive(true);
-                            StartCoroutine(SliderGo());
-                            StartCoroutine(ILoadScene(2));
-
+                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
                         }
-
-
                         StartCoroutine(Wait());
                     }
                     else
                     {
-                        MainMenuScrpit.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
-                        timer = 0f;
+                        GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
                         anim.SetTrigger("Shoot"); flash.Play();
                         //Gunshot
-                        gun.GetComponent<AudioSource>().PlayOneShot(gun.GetComponent<AudioSource>().clip);
-                    }             
+                        audioSource.PlayOneShot(gunshot);
+                    }
                 }
             }
             timer += Time.deltaTime;
-
-            
         }
-
     }
+
     IEnumerator Wait()
     {
-        
         yield return new WaitForSeconds(rand[x]/2);
         Choose(out tar2);
     }
@@ -119,18 +111,11 @@ public class targetsManager : MonoBehaviour
         if (loadImage.textures.Count == 0)
             material.mainTexture = tex;
         else
-            material.mainTexture = loadImage.textures[(x++)%(loadImage.textures.Count)];
+            material.mainTexture = loadImage.textures[(x)%(loadImage.textures.Count)];
 
         tar = Instantiate(target, coor.position, Quaternion.Euler(-90f, 0f, -90f));
     }
-    public void Skip()
-    {
-        isSkip = true;
-    }
-    public void deSkip()
-    {
-        isSkip = false;
-    }
+
     bool Shoot(out Vector2 coor)
     {
         RaycastHit hit;
@@ -147,20 +132,18 @@ public class targetsManager : MonoBehaviour
         }
             
     }
-    public IEnumerator ILoadScene(int scene)
+    public IEnumerable PLAYING()
     {
-        yield return new WaitForSecondsRealtime(3);
-        SceneManager.LoadSceneAsync(scene);
+        
+        yield return null;
     }
-    public IEnumerator SliderGo()
+
+    public void Skip()
     {
-        while (progress<1)
-        {
-            slider.value = progress;
-            progress += 0.001f;
-            yield return null;
-
-        }
-
+        isSkip = true;
+    }
+    public void deSkip()
+    {
+        isSkip = false;
     }
 }

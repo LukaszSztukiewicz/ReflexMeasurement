@@ -6,18 +6,11 @@ using TMPro;
 public class ScoreScript : MonoBehaviour
 {
     public TextMeshProUGUI scoretext;
-    public GameObject listHolder;
 
     // Start is called before the first frame update
     void Start()
     {
-        scoretext.text = calcScore(MainMenuScrpit.playerInfo.lista);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-      
+        scoretext.text = calcScore(GameMenager.playerInfo.lista);
     }
 
     public string calcScore(List<Info> listaa)
