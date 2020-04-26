@@ -21,6 +21,8 @@ public class targetsManager : MonoBehaviour
     private bool isHit;
     private Vector2 coor;
     private RaycastHit hit;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI debugCoor;
     Animator anim;
     //Lukasz
     public GameObject GameGUI;
@@ -56,7 +58,47 @@ public class targetsManager : MonoBehaviour
                 isHit = Shoot(out coor);
                 if (tar2 != null)
                 {
-                    RejestrShot();
+                    //Zapisy               
+                    if (isSkip)
+                    {
+                        GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
+                        isSkip = false;
+                        timer = 0f;
+                        Destroy(tar2); tar2 = null;
+                        x++;
+                        if (x >= loadImage.textures.Count)
+                        {
+                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
+                        }
+                        StartCoroutine(Wait(() =>
+                        {
+                            Choose(out tar2);
+                        }));
+                    }
+                    else if (isHit)
+                    {
+                        GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
+
+                        audioSource.PlayOneShot(confirmation);
+
+                        timer = 0f;
+                        Destroy(tar2); tar2 = null;
+                        x++;
+                        if (x >= loadImage.textures.Count)
+                        {
+                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
+                        }
+                        StartCoroutine(Wait(() =>
+                        {
+                            Choose(out tar2);
+                        }));
+                    }
+                    else
+                    {
+                        GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+                    }
                 }
             }
             timer += Time.deltaTime;
@@ -65,6 +107,7 @@ public class targetsManager : MonoBehaviour
 
     IEnumerator Wait(Action AfterWait)
     {
+        yield return null;
         yield return new WaitForSeconds(rand[x] / 2);
         AfterWait();
     }
@@ -78,69 +121,34 @@ public class targetsManager : MonoBehaviour
         else
             material.mainTexture = loadImage.textures[(x)%(loadImage.textures.Count)];
 
-        tar = Instantiate(target, coor.position, Quaternion.Euler(-90f, 0f, -90f));
+        tar = Instantiate(target, coor.position, Quaternion.Euler(90f, 90f, -90f));
     }
 
     bool Shoot(out Vector2 coor)
     {
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
+        if(Physics.Linecast(ray.origin,ray.origin+(ray.direction*10000f),out hit,mask))
         {
-            coor  =new Vector2(hit.textureCoord2.x*(float)material.mainTexture.width,Mathf.Abs((float)material.mainTexture.height*(1-hit.textureCoord2.y)));
+            coor = new Vector2(hit.textureCoord2.x * (float)material.mainTexture.width, Mathf.Abs((float)material.mainTexture.height * (1 - hit.textureCoord2.y)));
+            Debug.Log(coor);
+            debugCoor.text = "X:" + Mathf.RoundToInt(coor.x) + "\nY:" + Mathf.RoundToInt(coor.y);
             return true;
         }
+        /*    
+        if (Physics.Raycast(ray, out hit))
+        {
+            coor  =new Vector2(hit.textureCoord2.x*(float)material.mainTexture.width,Mathf.Abs((float)material.mainTexture.height*(1-hit.textureCoord2.y)));
+            Debug.Log(coor);
+            debugCoor.text = "X:" + Mathf.RoundToInt(coor.x) + "\nY:" + Mathf.RoundToInt(coor.y);
+            return true;
+        }*/
         else
         {
             coor = Vector2.zero;
             return false;
         }
             
-    }
-    public void RejestrShot()
-    {
-        //Zapisy               
-        if (isSkip)
-        {
-            GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
-            isSkip = false;
-            timer = 0f;
-            Destroy(tar2); tar2 = null;
-            x++;
-            if (x >= loadImage.textures.Count)
-            {
-                GameMenager.GameState = GameMenager.GameStates.OnEndGame;
-                GameGUI.GetComponent<GameGUIScrpit>().EndGame();
-            }
-            StartCoroutine(Wait(() =>
-            {
-                Choose(out tar2);
-            }));
-        }
-        else if (isHit)
-        {
-            GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
-
-            audioSource.PlayOneShot(confirmation);
-
-            timer = 0f;
-            Destroy(tar2); tar2 = null;
-            x++;
-            if (x >= loadImage.textures.Count)
-            {
-                GameMenager.GameState = GameMenager.GameStates.OnEndGame;
-                GameGUI.GetComponent<GameGUIScrpit>().EndGame();
-            }
-            StartCoroutine(Wait(() =>
-            {
-                Choose(out tar2);
-            }
-            ));
-        }
-        else
-        {
-            GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
-        }
     }
 
     public void Skip()
