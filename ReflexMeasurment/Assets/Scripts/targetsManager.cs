@@ -80,7 +80,7 @@ public class targetsManager : MonoBehaviour
         else
             material.mainTexture = loadImage.textures[(x)%(loadImage.textures.Count)];
 
-        tar = Instantiate(target, coor.position, Quaternion.Euler(-90f, 0f, -90f));
+        tar = Instantiate(target, coor.position, Quaternion.Euler(90f, 90f, -90f));
     }
 
     bool Shoot(out Vector2 coor)
