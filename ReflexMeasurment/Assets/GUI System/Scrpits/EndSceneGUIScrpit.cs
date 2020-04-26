@@ -69,7 +69,7 @@ public class EndSceneGUIScrpit : MonoBehaviour
     }
     public void Again()
     {
-        playerInfo = new playerInfo();
+        playerInfo.lista = new List<Info>();
         SceneManager.LoadScene(0);
     }
 }

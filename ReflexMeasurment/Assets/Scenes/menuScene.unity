@@ -337,7 +337,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 0
+  m_padding: 2.879
   m_canvasRenderer: {fileID: 251797379}
   m_TextComponent: {fileID: 737731861}
   m_materialReferenceIndex: 1
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   m_text: "\nAUTORS: Miko\u0142aj Szawerda & \u0141ukasz Sztukiewicz\n\nLICENSE:
     APACHE 2.0\n\nCONTACT: \nlukasz.sztukiewicz@gmail.com\nmikolaj.szawerda@wp.pl\n\nFeel
     free to contact us and share your experience!\n\nGithub: https://github.com/LukaszSztukiewicz/ReflexMeasurement\n\nVersion:
-    1.7.0s"
+    1.8.0s"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
