@@ -10,6 +10,7 @@ public class MainMenuScrpit : MonoBehaviour
     bool secondTry = false;
 
     // Start is called before the first frame update
+
     void Start()
     {
         GameMenager.GameState = GameMenager.GameStates.OnMenu;
@@ -49,4 +50,6 @@ public class MainMenuScrpit : MonoBehaviour
         MainMenu.SetActive(true);
        
     }
+
+
 }
