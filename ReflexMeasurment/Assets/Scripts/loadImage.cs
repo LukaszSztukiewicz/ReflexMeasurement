@@ -17,7 +17,7 @@ public class loadImage : MonoBehaviour
     {
         try
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo("Images");
+            DirectoryInfo directoryInfo = new DirectoryInfo("ImagesxD");
             if (directoryInfo.Exists)
                 Debug.Log("Jest folder");
             else

@@ -71,7 +71,10 @@ public class targetsManager : MonoBehaviour
                             GameMenager.GameState = GameMenager.GameStates.OnEndGame;
                             GameGUI.GetComponent<GameGUIScrpit>().EndGame();
                         }
-                        WatiForInstantiate();
+                        StartCoroutine(Wait(() =>
+                        {
+                            Choose(out tar2);
+                        }));
                     }
                     else if (isHit)
                     {
@@ -87,7 +90,10 @@ public class targetsManager : MonoBehaviour
                             GameMenager.GameState = GameMenager.GameStates.OnEndGame;
                             GameGUI.GetComponent<GameGUIScrpit>().EndGame();
                         }
-                        WatiForInstantiate();
+                        StartCoroutine(Wait(() =>
+                        {
+                            Choose(out tar2);
+                        }));
                     }
                     else
                     {
@@ -101,6 +107,7 @@ public class targetsManager : MonoBehaviour
 
     IEnumerator Wait(Action AfterWait)
     {
+        yield return null;
         yield return new WaitForSeconds(rand[x] / 2);
         AfterWait();
     }
@@ -128,7 +135,7 @@ public class targetsManager : MonoBehaviour
             debugCoor.text = "X:" + Mathf.RoundToInt(coor.x) + "\nY:" + Mathf.RoundToInt(coor.y);
             return true;
         }
-            /*
+        /*    
         if (Physics.Raycast(ray, out hit))
         {
             coor  =new Vector2(hit.textureCoord2.x*(float)material.mainTexture.width,Mathf.Abs((float)material.mainTexture.height*(1-hit.textureCoord2.y)));
@@ -142,13 +149,6 @@ public class targetsManager : MonoBehaviour
             return false;
         }
             
-    }
-    public void WatiForInstantiate()
-    {
-        StartCoroutine(Wait(() =>
-        {
-            Choose(out tar2);
-        }));
     }
 
     public void Skip()
