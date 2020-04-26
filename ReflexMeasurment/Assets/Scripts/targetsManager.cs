@@ -21,6 +21,8 @@ public class targetsManager : MonoBehaviour
     private bool isHit;
     private Vector2 coor;
     private RaycastHit hit;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI debugCoor;
     Animator anim;
     //Lukasz
     public GameObject GameGUI;
@@ -85,11 +87,21 @@ public class targetsManager : MonoBehaviour
     {
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
+        if(Physics.Linecast(ray.origin,ray.origin+(ray.direction*10000f),out hit,mask))
         {
-            coor  =new Vector2(hit.textureCoord2.x*(float)material.mainTexture.width,Mathf.Abs((float)material.mainTexture.height*(1-hit.textureCoord2.y)));
+            coor = new Vector2(hit.textureCoord2.x * (float)material.mainTexture.width, Mathf.Abs((float)material.mainTexture.height * (1 - hit.textureCoord2.y)));
+            Debug.Log(coor);
+            debugCoor.text = "X:" + Mathf.RoundToInt(coor.x) + "\nY:" + Mathf.RoundToInt(coor.y);
             return true;
         }
+            /*
+        if (Physics.Raycast(ray, out hit))
+        {
+            coor  =new Vector2(hit.textureCoord2.x*(float)material.mainTexture.width,Mathf.Abs((float)material.mainTexture.height*(1-hit.textureCoord2.y)));
+            Debug.Log(coor);
+            debugCoor.text = "X:" + Mathf.RoundToInt(coor.x) + "\nY:" + Mathf.RoundToInt(coor.y);
+            return true;
+        }*/
         else
         {
             coor = Vector2.zero;
