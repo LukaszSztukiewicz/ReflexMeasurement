@@ -51,10 +51,6 @@ public class EndSceneGUIScrpit : MonoBehaviour
         {
             Debug.Log(ex.Message);
         }
-        finally
-        {
-            Application.Quit();
-        }
 
 
 
@@ -70,6 +66,6 @@ public class EndSceneGUIScrpit : MonoBehaviour
     public void Again()
     {
         playerInfo.lista = new List<Info>();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
