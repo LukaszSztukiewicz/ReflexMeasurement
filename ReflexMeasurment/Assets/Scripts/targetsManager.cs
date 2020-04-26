@@ -58,7 +58,41 @@ public class targetsManager : MonoBehaviour
                 isHit = Shoot(out coor);
                 if (tar2 != null)
                 {
-                    RejestrShot();
+                    //Zapisy               
+                    if (isSkip)
+                    {
+                        GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
+                        isSkip = false;
+                        timer = 0f;
+                        Destroy(tar2); tar2 = null;
+                        x++;
+                        if (x >= loadImage.textures.Count)
+                        {
+                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
+                        }
+                        WatiForInstantiate();
+                    }
+                    else if (isHit)
+                    {
+                        GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
+
+                        audioSource.PlayOneShot(confirmation);
+
+                        timer = 0f;
+                        Destroy(tar2); tar2 = null;
+                        x++;
+                        if (x >= loadImage.textures.Count)
+                        {
+                            GameMenager.GameState = GameMenager.GameStates.OnEndGame;
+                            GameGUI.GetComponent<GameGUIScrpit>().EndGame();
+                        }
+                        WatiForInstantiate();
+                    }
+                    else
+                    {
+                        GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
+                    }
                 }
             }
             timer += Time.deltaTime;
@@ -109,50 +143,12 @@ public class targetsManager : MonoBehaviour
         }
             
     }
-    public void RejestrShot()
+    public void WatiForInstantiate()
     {
-        //Zapisy               
-        if (isSkip)
+        StartCoroutine(Wait(() =>
         {
-            GameMenager.playerInfo.lista.Add(new Info(-1, timer, Vector2.zero));
-            isSkip = false;
-            timer = 0f;
-            Destroy(tar2); tar2 = null;
-            x++;
-            if (x >= loadImage.textures.Count)
-            {
-                GameMenager.GameState = GameMenager.GameStates.OnEndGame;
-                GameGUI.GetComponent<GameGUIScrpit>().EndGame();
-            }
-            StartCoroutine(Wait(() =>
-            {
-                Choose(out tar2);
-            }));
-        }
-        else if (isHit)
-        {
-            GameMenager.playerInfo.lista.Add(new Info(1, timer, coor));
-
-            audioSource.PlayOneShot(confirmation);
-
-            timer = 0f;
-            Destroy(tar2); tar2 = null;
-            x++;
-            if (x >= loadImage.textures.Count)
-            {
-                GameMenager.GameState = GameMenager.GameStates.OnEndGame;
-                GameGUI.GetComponent<GameGUIScrpit>().EndGame();
-            }
-            StartCoroutine(Wait(() =>
-            {
-                Choose(out tar2);
-            }
-            ));
-        }
-        else
-        {
-            GameMenager.playerInfo.lista.Add(new Info(0, timer, Vector2.zero));
-        }
+            Choose(out tar2);
+        }));
     }
 
     public void Skip()
